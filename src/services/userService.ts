@@ -44,8 +44,8 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
         url: 'https://kauth.kakao.com/oauth/token',
         params: {
             'grant_type': 'authorization_code',
-            'client_id': process.env.REST_API_KEY,
-            'redirect_url': process.env.REDIRECT_URI,
+            'client_id': process.env.KAKAO_REST_API_KEY,
+            'redirect_url': process.env.KAKAO_REDIRECT_URI,
             'code': kakaoCode
         },
         withCredentials: true
