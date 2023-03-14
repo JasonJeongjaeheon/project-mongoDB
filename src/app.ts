@@ -1,12 +1,11 @@
 import dotenv from 'dotenv'
+dotenv.config()
 
 import express, { Application, Express, Request, Response } from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 
 import { routes } from './routes'
-
-dotenv.config()
 
 const createApp = (): Application => {
     const app: Express = express()
