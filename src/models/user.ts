@@ -16,7 +16,13 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 5
     },
-    profile_image: String
+    profile_image: String,
+    social_id: {
+        type: Number
+    },
+    social_type_id: {
+        type: Number
+    }
 })
 
 export default mongoose.model('User', userSchema)
