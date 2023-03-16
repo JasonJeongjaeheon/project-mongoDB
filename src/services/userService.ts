@@ -4,6 +4,7 @@ import jwt, { Secret, SignOptions } from 'jsonwebtoken'
 import axios from 'axios'
 
 const userLogin = async(email: string, password: string): Promise<any> => {
+
     const isExistUser = await User.findOne({
         email: email
     })
@@ -25,7 +26,12 @@ const userLogin = async(email: string, password: string): Promise<any> => {
             expiresIn: process.env.JWT_EXPIRES_IN
         }
         accessToken = jwt.sign(payload, secretPrivateKey, options)
-    } else {
+    } else if (isExistUser.password){
+        const match = await bcrypt.compare(password, isExistUser.password!)
+        
+        if(!match){
+            throw new Error('INVALID_INPUT_DATA')
+        }
         const payload = {id: isExistUser.id}
         const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
         const options: SignOptions = {
@@ -33,6 +39,8 @@ const userLogin = async(email: string, password: string): Promise<any> => {
             expiresIn: process.env.JWT_EXPIRES_IN
         }
         accessToken = jwt.sign(payload, secretOrPrivateKey, options)
+    } else if (!isExistUser.password){
+        return null
     }
     return accessToken
 }
@@ -53,16 +61,17 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
 
     const getUserInfoByKakao = await axios({
         method: 'get',
-        url: 'https://kapi.kakao.com/v1/oidc/userinfo',
+        url: 'https://kapi.kakao.com/v2/user/me',
         headers: {
-            'Authorization': `Bearer ${kakaoAccessToken.data.access_token}`
-        } 
+            Authorization: `Bearer ${kakaoAccessToken.data.access_token}`
+        }
     })
 
-    const kakaoId = getUserInfoByKakao.data.sub
-    const email = getUserInfoByKakao.data.email
+    const kakaoId = getUserInfoByKakao.data.id
+    const email = getUserInfoByKakao.data.kakao_account.email
+    const userName = getUserInfoByKakao.data.properties.nickname
+    const profileImage = getUserInfoByKakao.data.properties.profile_image
     const socialTypeId = 1
-    const { profileImage, nickname } = getUserInfoByKakao.data
 
     const isExistUser = await User.findOne({
         email: email
@@ -71,50 +80,16 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
     let accessToken: string = '';
 
     if(!isExistUser) {
-        await User.create(kakaoId, socialTypeId, email, profileImage, nickname)
+
+        await User.create({
+            name: userName,
+            email,
+            profile_image: profileImage,
+            social_id: kakaoId,
+            social_type_id: socialTypeId
+        })
+
         const payload = {id: kakaoId}
-        const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
-        const options: SignOptions = {
-            algorithm: 'HS256',
-            expiresIn: process.env.JWT_EXPIRES_IN
-        }
-        accessToken = jwt.sign(payload, secretOrPrivateKey, options)
-    } else {
-        const payload = {id: isExistUser.social_id}
-        const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
-        const options: SignOptions = {
-            algorithm: 'HS256',
-            expiresIn: process.env.JWT_EXPIRES_IN
-        }
-        accessToken = jwt.sign(payload, secretOrPrivateKey, options)
-    }
-    return accessToken
-}
-
-const naverLogin = async(naverToken: string): Promise<string> => {
-
-    const getUserInfoByNaver = await axios({
-        method: 'get',
-        url:'https://openapi.naver.com/v1/nid/me',
-        headers: {
-            'Authorization': `Bearer ${naverToken}`
-        }
-    })
-
-    const naverId = getUserInfoByNaver.data.response.id;
-    const email = getUserInfoByNaver.data.response.email;
-    const socialTypeId = 2;
-    const { profileImage, name } = getUserInfoByNaver.data.response
-
-    const isExistUser = await User.findOne({
-        email: email
-    })
-
-    let accessToken: string = '';
-
-    if(!isExistUser) {
-        await User.create(naverId, socialTypeId, email, profileImage, name)
-        const payload = {id: naverId}
         const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
         const options: SignOptions = {
             algorithm: 'HS256',
@@ -135,6 +110,5 @@ const naverLogin = async(naverToken: string): Promise<string> => {
 
 export {
     userLogin,
-    kakaoLogin,
-    naverLogin
+    kakaoLogin
 }

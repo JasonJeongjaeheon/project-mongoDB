@@ -9,6 +9,9 @@ const userLogin = catchAsync(async(req: Request, res: Response): Promise<void> =
         throw new Error('missing email or password')
     }
     const accessToken = await userService.userLogin(email, password)
+    if(!accessToken){
+        res.status(401).json({message: 'please login by social id'})
+    }
     res.status(200).json({accessToken})
 })
 
@@ -22,18 +25,7 @@ const kakaoLogin = catchAsync(async(req: Request, res: Response): Promise<void> 
     res.status(200).json({accessToken})
 })
 
-const naverLogin = catchAsync(async(req: Request, res: Response): Promise<void> => {
-    const naverToken = req.headers.authorization as string
-
-    if(!naverToken){
-        throw new Error('missing naver token')
-    }
-    const accessToken = await userService.naverLogin(naverToken)
-    res.status(200).json({accessToken})
-})
-
 export {
     userLogin,
-    kakaoLogin,
-    naverLogin
+    kakaoLogin
 }
