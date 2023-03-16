@@ -1,5 +1,8 @@
-import express from 'express'
+import express, { Router } from 'express'
+import * as userRouter from './userRouter'
 
-const routes = express.Router()
+const routes: Router = express.Router()
+
+routes.use('/users', userRouter.routes)
 
 export { routes }

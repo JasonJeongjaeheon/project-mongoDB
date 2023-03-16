@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
         maxlength: 50
     },
     email: {
@@ -14,10 +13,23 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
         minlength: 5
     },
-    profile_image: String
+    profile_image: {
+        type: String
+    },
+    social_id: {
+        type: Number
+    },
+    social_type_id: {
+        type: Number
+    },
+    isAdmin: { 
+        type: Boolean, 
+        default: false 
+    }
 })
+
+mongoose.model('User', userSchema).updateMany({}, { $set: { isAdmin: false } }).exec();
 
 export default mongoose.model('User', userSchema)
