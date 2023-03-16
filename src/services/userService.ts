@@ -81,7 +81,7 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
 
     if(!isExistUser) {
 
-        await User.create({
+        const user = await User.create({
             name: userName,
             email,
             profile_image: profileImage,
@@ -89,7 +89,7 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
             social_type_id: socialTypeId
         })
 
-        const payload = {id: kakaoId}
+        const payload = {id: user.id}
         const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
         const options: SignOptions = {
             algorithm: 'HS256',
@@ -97,7 +97,7 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
         }
         accessToken = jwt.sign(payload, secretOrPrivateKey, options)
     } else {
-        const payload = {id: isExistUser.social_id}
+        const payload = {id: isExistUser.id}
         const secretOrPrivateKey: Secret = process.env.JWT_SECRET!
         const options: SignOptions = {
             algorithm: 'HS256',
@@ -108,7 +108,13 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
     return accessToken
 }
 
+const getUserById = async(userId?: Number | String): Promise<any> => {
+    const userInfo = await User.findById(userId)
+    return userInfo
+}
+
 export {
     userLogin,
-    kakaoLogin
+    kakaoLogin,
+    getUserById
 }

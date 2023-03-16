@@ -1,6 +1,10 @@
 .env
 .env.test
 schema.sql
+/files
+files
+Files
+File
 
 # compiled output
 /dist
