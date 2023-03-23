@@ -6,6 +6,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 
 import { routes } from './routes'
+import logger from './utils/winston'
 
 const createApp = (): Application => {
     const app: Express = express()
@@ -14,6 +15,9 @@ const createApp = (): Application => {
     app.use(morgan('combined'))
     app.use(express.json())
     app.use(routes)
+
+    logger.info('test')
+    logger.error('error', console.error())
 
     app.get('/ping', (req: Request, res: Response) => {
         res.status(200).json({message: 'pong'})

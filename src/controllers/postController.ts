@@ -10,8 +10,9 @@ const uploadPost = catchAsync(async(req: Request, res: Response): Promise<void> 
         res.status(400).json({message: "NULL_VALUES"})
     }
 
-    const userId = req.cookies._id
+    const userId = req.cookies.id
     const { postId, title, description } = req.body
+
     const path = fileData[0].path
 
     if(!title && !description){
@@ -23,7 +24,7 @@ const uploadPost = catchAsync(async(req: Request, res: Response): Promise<void> 
 )
 
 const deletePost = catchAsync(async(req: Request, res: Response): Promise<void> => {
-    const { postId, title, description } = req.body 
+    const { postId, title, description } = req.body
     const userId = req.cookies.id
 
     if(!postId && !title && !description){
