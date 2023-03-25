@@ -71,7 +71,7 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
     const email = getUserInfoByKakao.data.kakao_account.email
     const userName = getUserInfoByKakao.data.properties.nickname
     const profileImage = getUserInfoByKakao.data.properties.profile_image
-    const socialTypeId = 1
+    const socialType = 'kakao'
 
     const isExistUser = await User.findOne({
         email: email
@@ -85,8 +85,10 @@ const kakaoLogin = async(kakaoCode: string): Promise<string> => {
             name: userName,
             email,
             profile_image: profileImage,
-            social_id: kakaoId,
-            social_type_id: socialTypeId
+            social_info: {
+                social_id: kakaoId,
+                social_type: socialType
+            }
         })
 
         const payload = {id: user.id}
