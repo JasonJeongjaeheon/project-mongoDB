@@ -18,11 +18,9 @@ const userSchema = new mongoose.Schema({
     profile_image: {
         type: String
     },
-    social_id: {
-        type: Number
-    },
-    social_type_id: {
-        type: Number
+    social_info: {
+        social_id: Number,
+        social_type: String
     },
     isAdmin: { 
         type: Boolean, 
