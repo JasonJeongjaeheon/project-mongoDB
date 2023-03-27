@@ -11,14 +11,14 @@ const uploadPost = catchAsync(async(req: Request, res: Response): Promise<void> 
     }
 
     const userId = req.cookies.id
-    const { postId, title, description } = req.body
+    const { title, description } = req.body
 
     const path = fileData[0].path
 
     if(!title && !description){
         res.status(400).json({message: 'KEY_ERROR'})
     }
-        const files = await postService.uploadPost(userId, postId,title, description, path)
+        const files = await postService.uploadPost(userId, title, description, path)
         res.status(200).json({data: files})
     }
 )

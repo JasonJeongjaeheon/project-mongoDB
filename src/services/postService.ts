@@ -1,10 +1,10 @@
 import Post from '../models/post'
+import bcrypt from 'bcrypt'
 import { getUserById } from './userService'
 
-const uploadPost = async(userId: string, postId: number, title: string, description: string, path: string) => {
+const uploadPost = async(userId: string, title: string, description: string, path: string) => {
         return await Post.create({
             user_id: userId,
-            post_id: postId,
             title,
             description,
             image_url: path
