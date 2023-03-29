@@ -3,8 +3,12 @@ import bcrypt from 'bcrypt'
 import { getUserById } from './userService'
 
 const uploadPost = async(userId: string, title: string, description: string, path: string) => {
+
+        const userInfo = await getUserById(userId)
+
         return await Post.create({
             user_id: userId,
+            user_email: userInfo.email,
             title,
             description,
             image_url: path

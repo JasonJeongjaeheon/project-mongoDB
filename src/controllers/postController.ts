@@ -18,8 +18,8 @@ const uploadPost = catchAsync(async(req: Request, res: Response): Promise<void> 
     if(!title && !description){
         res.status(400).json({message: 'KEY_ERROR'})
     }
-        const files = await postService.uploadPost(userId, title, description, path)
-        res.status(200).json({data: files})
+        const imageData = await postService.uploadPost(userId, title, description, path)
+        res.status(200).json({message: 'image completed uploaded'})
     }
 )
 
@@ -43,11 +43,14 @@ const patchPost = catchAsync(async(req: Request, res: Response): Promise<void> =
     const patchedPath = patchFileData[0].path
 
     const patchData = await postService.patchPost(userId, postId, title, description, patchedPath)
-    res.status(200).json({data : patchData})
+    res.status(200).json({patchData})
 })
 
 const getAllPost = catchAsync(async(req: Request, res: Response): Promise<void> => {
+    // const imageDir = require('./files')
+    // console.log(imageDir)
     const data = await postService.getAllPost()
+    console.log(data)
     res.status(200).json({data})
 })
 
