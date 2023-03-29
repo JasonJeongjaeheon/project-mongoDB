@@ -32,7 +32,3 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
-      - run: npm run tsc
-        if: ${{ always() }}
-      - run: npm run build
-        if: ${{ always() }}
