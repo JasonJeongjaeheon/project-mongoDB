@@ -26,7 +26,11 @@ const postSchema = new mongoose.Schema({
     post_date: {
         type: Date,
         default: koreanTime.setUTCHours(koreanTime.getUTCHours() + 9)
-    }
+    },
+    like_count: {
+        type: Number,
+        default: 0
+    },
 })
 
 mongoose.model('Post', postSchema).updateMany({}, { $set: { isAdmin: false } }).exec();

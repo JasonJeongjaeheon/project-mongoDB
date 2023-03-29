@@ -24,8 +24,6 @@ const upload = multer({
     }
 })
 
-//const upload = multer({dest: 'files/'})
-
 routes.get('', postController.getAllPost)
 routes.get('/uploads', loginAuthorization, postController.getPostByUserId)
 routes.post('', loginAuthorization, upload.array('image_url', 13), postController.uploadPost)

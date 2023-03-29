@@ -1,5 +1,4 @@
 import Post from '../models/post'
-import bcrypt from 'bcrypt'
 import { getUserById } from './userService'
 
 const uploadPost = async(userId: string, title: string, description: string, path: string) => {
@@ -29,7 +28,7 @@ const patchPost = async(userId: string, postId: number, title: string, descripti
     return await Post.findOneAndUpdate(
         {
             user_id: userId, 
-            post_id: postId
+            _id: postId
         },
         {
             title, 

@@ -18,7 +18,7 @@ const uploadPost = catchAsync(async(req: Request, res: Response): Promise<void> 
     if(!title && !description){
         res.status(400).json({message: 'KEY_ERROR'})
     }
-        const imageData = await postService.uploadPost(userId, title, description, path)
+        await postService.uploadPost(userId, title, description, path)
         res.status(200).json({message: 'image completed uploaded'})
     }
 )
@@ -39,6 +39,8 @@ const patchPost = catchAsync(async(req: Request, res: Response): Promise<void> =
     const userId = req.cookies.id
     const { postId, title, description } = req.body
 
+    console.log(postId)
+
     const patchFileData: any = req.files
     const patchedPath = patchFileData[0].path
 
@@ -47,11 +49,12 @@ const patchPost = catchAsync(async(req: Request, res: Response): Promise<void> =
 })
 
 const getAllPost = catchAsync(async(req: Request, res: Response): Promise<void> => {
-    // const imageDir = require('./files')
-    // console.log(imageDir)
+
     const data = await postService.getAllPost()
-    console.log(data)
-    res.status(200).json({data})
+    const stringIndex = data[0].image_url.indexOf('-')
+    const postDataInfo = data.filter(v => v.image_url = v.image_url.slice(stringIndex+1))
+
+    res.status(200).json({postDataInfo})
 })
 
 const getPostByUserId = catchAsync(async(req: Request, res: Response): Promise<void> => {
