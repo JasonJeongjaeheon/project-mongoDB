@@ -1,3 +1,4 @@
+import Like from '../models/like'
 import Post from '../models/post'
 import { getUserById } from './userService'
 
@@ -5,13 +6,20 @@ const uploadPost = async(userId: string, title: string, description: string, pat
 
         const userInfo = await getUserById(userId)
 
-        return await Post.create({
+        const postData =  await Post.create({
             user_id: userId,
             user_email: userInfo.email,
             title,
             description,
             image_url: path
         }) 
+
+        await Like.create({
+            user_id: userId,
+            post_id: postData.id
+        })
+
+        return postData
     }
 
 const deletePost = async(userId: string, postId: number, title: string, description: string) => {

@@ -6,10 +6,9 @@ const updateLike = catchAsync(async(req: Request, res: Response): Promise<any> =
     const userId = req.cookies.id
     const postId = req.params.postId as string
 
-    const postLikeByUser = await likeService.getLikeInfoByUserId(userId, postId)
-    console.log('controller', postLikeByUser)
+    const getPostLikeById = await likeService.getPostLikeByUserId(userId)
 
-    if(!postLikeByUser){
+    if(!getPostLikeById){
         await likeService.postLike(userId, postId)
         res.status(200).json({message: 'likes completely posted'})
     } else {
