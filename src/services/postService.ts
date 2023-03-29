@@ -1,10 +1,13 @@
 import Post from '../models/post'
-import bcrypt from 'bcrypt'
 import { getUserById } from './userService'
 
 const uploadPost = async(userId: string, title: string, description: string, path: string) => {
+
+        const userInfo = await getUserById(userId)
+
         return await Post.create({
             user_id: userId,
+            user_email: userInfo.email,
             title,
             description,
             image_url: path
@@ -25,7 +28,7 @@ const patchPost = async(userId: string, postId: number, title: string, descripti
     return await Post.findOneAndUpdate(
         {
             user_id: userId, 
-            post_id: postId
+            _id: postId
         },
         {
             title, 
