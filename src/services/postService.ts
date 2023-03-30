@@ -46,8 +46,19 @@ const patchPost = async(userId: string, postId: number, title: string, descripti
         {new: true})
 }
 
-const getAllPost = async() => {
-    return await Post.find()
+const getAllPost = async(pageNumber: number) => {
+
+    const pageSize = 10
+    const skip = (pageNumber -1) * pageSize
+    const sortField = 'post_date'
+    const sortOrder = -1
+
+    const imageDataBypage = await Post.find()
+                                .limit(pageSize)
+                                .skip(skip)
+                                .sort({[sortField]: sortOrder})
+
+    return imageDataBypage
 }
 
 const getPostByUserId = async(userId: string) => {

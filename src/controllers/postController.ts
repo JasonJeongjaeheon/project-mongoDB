@@ -50,7 +50,9 @@ const patchPost = catchAsync(async(req: Request, res: Response): Promise<void> =
 
 const getAllPost = catchAsync(async(req: Request, res: Response): Promise<void> => {
 
-    const data = await postService.getAllPost()
+    const pageNumber = Number(req.params.pageNumber) as number
+    
+    const data = await postService.getAllPost(pageNumber)
     const stringIndex = data[0].image_url.indexOf('-')
     const postDataInfo = data.filter(v => v.image_url = v.image_url.slice(stringIndex+1))
 
