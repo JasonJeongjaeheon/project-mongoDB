@@ -24,7 +24,7 @@ const upload = multer({
     }
 })
 
-routes.get('', postController.getAllPost)
+routes.get('/:pageNumber', postController.getAllPost)
 routes.get('/uploads', loginAuthorization, postController.getPostByUserId)
 routes.post('', loginAuthorization, upload.array('image_url', 13), postController.uploadPost)
 routes.delete('', loginAuthorization, postController.deletePost)
