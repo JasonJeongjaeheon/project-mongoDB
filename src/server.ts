@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
-dotenv.config()
-
+import config from './configs/environment'
 import { createApp } from "./app";
 import appDataSource from './dataSource';
 
 const setServer = async(): Promise<void> => {
     const app = createApp()
-    const PORT = process.env.PORT
+    const PORT = config.port
 
     appDataSource
     .then(() => {
