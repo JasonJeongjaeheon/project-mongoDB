@@ -1,4 +1,6 @@
 .env
+.development.env
+.production.env
 .env.test
 schema.sql
 /files
