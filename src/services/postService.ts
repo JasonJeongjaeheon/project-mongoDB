@@ -1,5 +1,6 @@
 import Like from '../models/like'
 import Post from '../models/post'
+import Comment from '../models/comment'
 import { getUserById } from './userService'
 
 const uploadPost = async(userId: string, title: string, description: string, path: string) => {
@@ -15,7 +16,6 @@ const uploadPost = async(userId: string, title: string, description: string, pat
         }) 
 
         await Like.create({
-            user_id: userId,
             post_id: postData.id
         })
 
